@@ -2,12 +2,13 @@
 Installation
 ============
 
-At the command line either via easy_install or pip::
+The project is hosted on GitHub. Get a copy by running::
 
-    $ easy_install propro
-    $ pip install propro
+	$ git clone https://github.com/jakeret/propro.git
 
-Or, if you have virtualenvwrapper installed::
+Install the package like this::
 
-    $ mkvirtualenv propro
-    $ pip install propro
+	$ cd propro
+	$ pip install -r requirements.txt
+	$ python setup.py install --user
+	

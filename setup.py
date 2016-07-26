@@ -49,7 +49,7 @@ setup(
     package_dir={'propro': 'propro'},
     include_package_data=True,
     install_requires=requires,
-    license='Proprietary',
+    license='GPLv3',
     zip_safe=False,
     keywords='propro',
     entry_points={
@@ -61,7 +61,7 @@ setup(
         'Development Status :: 2 - Pre-Alpha',
         "Intended Audience :: Science/Research",
         'Intended Audience :: Developers',
-        'License :: Other/Proprietary License',
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         'Natural Language :: English',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
