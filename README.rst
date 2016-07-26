@@ -2,6 +2,9 @@
 Process profiler
 =============================
 
+.. image:: https://img.shields.io/badge/docs-latest-blue.svg?style=flat
+        :target: http://propro.readthedocs.io/en/latest
+
 A simple process profiler. **propro** can be used in many different ways. Conviniently in can be used on the command line::
 
 $ propro --fmt=png <command>
@@ -47,6 +50,7 @@ The profiling output is stored in the folder where the Python code was launched.
 Finally, **propro** can be embedded in your IPython notebooks. Load the extentsion with
 
 .. code-block:: python
+
     import propro
 
     %load_ext propro
