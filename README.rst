@@ -71,4 +71,11 @@ or on cell level
     X_a = np.dot(np.dot(P, np.diag(D)), Q)
     print(np.std(X), np.std(X_a), np.std(X - X_a))
     
+The output will look something like this if rendered into an image:
+
+.. image:: https://raw.githubusercontent.com/jakeret/propro/master/docs/profile.png
+   :alt: Forecasted healpix map with **SEEK**.
+   :align: center
+
+
     
