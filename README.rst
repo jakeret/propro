@@ -74,7 +74,7 @@ or on cell level
 The output will look something like this if rendered into an image:
 
 .. image:: https://raw.githubusercontent.com/jakeret/propro/master/docs/profile.png
-   :alt: Forecasted healpix map with **SEEK**.
+   :alt: Profiling output from propro
    :align: center
 
 
