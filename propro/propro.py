@@ -189,7 +189,7 @@ class profile(object):
         self.sample_rate = sample_rate
         self.timeout = timeout
         
-        if isinstance(fmt, basestring):
+        if isinstance(fmt, str):
             fmt = [fmt]
         self.fmt = fmt
         self.save_fig=True
@@ -200,18 +200,24 @@ class profile(object):
             pid = os.getpid()
             profiler = Profiler(pid, self.sample_rate)
             baseline = _measure(profiler.process)
+
             try:
                 profiler.start()
                 t0 = datetime.now()
                 res = func(*args, **kwargs)
                 profiler.cancel()
                 ex = profiler.exception(self.timeout)
+
                 if ex is not None:
                     raise ex
+
                 prof_res = profiler.result(self.timeout)
+
                 if self.callname is None:
-                    self.callname = func.func_name
+                    self.callname = func.__name__
+
                 self.fig = output(prof_res, self.fmt, self.callname, t0, baseline, self.save_fig)
+
                 return res
             finally:
                 profiler.cancel()

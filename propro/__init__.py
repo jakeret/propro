@@ -6,7 +6,7 @@ __credits__ = 'ETH Zurich, Institute for Astronomy'
 def format_date(date, fmt="%Y-%m-%d-%H:%M:%S"):
     return date.strftime(fmt)
 
-from propro import *
+from propro.propro import *
 
 try:
     from magic import *
