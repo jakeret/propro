@@ -17,12 +17,13 @@ Created on Mar 29, 2016
 
 author: jakeret
 '''
-from __future__ import print_function, division, absolute_import
 
 from datetime import datetime
 
 import click
+
 from propro.propro import profile_cmd, output
+
 
 @click.command(context_settings=dict(ignore_unknown_options=True))
 @click.option("--sample-rate", default=None, type=float, help="Rate at which the process is being queried")
@@ -37,14 +38,13 @@ def run(sample_rate, timeout, fmt, name, cmd):
     cmd = " ".join(cmd)
     fmts = fmt.split(",")
     t0 = datetime.now()
-    
-    print("Going to profile '%s'"%cmd)
-    
+
+    print("Going to profile '%s'" % cmd)
+
     prof_result = profile_cmd(cmd, sample_rate, timeout)
-    
+
     if name is None:
         name = cmd.replace(" ", "_")
-        
-    print("Done. Output is written with prefix '%s' in format(s) '%s'"%(name, fmt))
+
+    print("Done. Output is written with prefix '%s' in format(s) '%s'" % (name, fmt))
     output(prof_result, fmts, name, t0, save_fig=True)
-    

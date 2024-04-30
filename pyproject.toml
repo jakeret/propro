@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "propro"
+version = "0.1.0"
+description = "Profiles a process"
+authors = ["Joel Akeret <you@example.com>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+click = "^8.1"
+psutil = "^5.9"
+matplotlib = "^3.8"
+seaborn = "^0.13"
+numpy = "^1.26"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+
+[tool.poetry.scripts]
+propro = "propro.cli:run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

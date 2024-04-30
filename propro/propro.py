@@ -12,18 +12,17 @@
 # along with propro.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# System imports
-from __future__ import print_function, division, absolute_import, unicode_literals
-
-import time
-import psutil
-import subprocess
-import threading
 import os
-import traceback
+import subprocess
 import sys
+import threading
+import time
+import traceback
 from collections import namedtuple
 from datetime import datetime
+
+import psutil
+
 from propro import format_date
 
 __all__ = ["profile", "profile_pid", "profile_cmd"]
@@ -34,43 +33,47 @@ SLEEP_TIME = 0.5
 
 PLOTTING_FMTS = ("pdf", "png")
 
+
 class TimeoutError(Exception):
     pass
+
 
 def _savetxt(filename, result):
     with open(filename, "w") as fp:
         for i in range(len(result.time)):
             fp.write("\t".join((str(col[i]) for col in result)))
             fp.write("\n")
-            
+
+
 def output(result, fmts, call, t0, baseline=None, save_fig=False):
     fig = None
-    
+
     if baseline is not None:
         result = ProfileResult(result.time,
                                [tmp - baseline[0] for tmp in result.rss_mem],
                                [tmp - baseline[1] for tmp in result.vms_mem],
                                result.cpu_load,
                                [tmp - baseline[3] for tmp in result.threads])
-    
+
     for fmt in set(fmts):
         if fmt in PLOTTING_FMTS:
             from propro import plotting
             fig = plotting.profile_plot(result, call, t0, fmt, save_fig)
-            
+
         elif fmt == "txt":
-            _savetxt("propro_%s_%s.%s"%(call, format_date(t0),fmt), result)
-            
+            _savetxt("propro_%s_%s.%s" % (call, format_date(t0), fmt), result)
+
     return fig
+
 
 def _measure(parent, interval=None):
     processes = parent.children(recursive=True)
     processes.append(parent)
-    
-    rss_mem=0
-    vms_mem=0
-    cpu_percent=0
-    num_threads=0
+
+    rss_mem = 0
+    vms_mem = 0
+    cpu_percent = 0
+    num_threads = 0
     for process in processes:
         try:
             mem_info = process.memory_info()
@@ -85,7 +88,7 @@ def _measure(parent, interval=None):
 
 
 class Profiler(threading.Thread):
-    
+
     def __init__(self, pid, sleep_time=None):
         if sleep_time is None:
             sleep_time = SLEEP_TIME
@@ -100,7 +103,7 @@ class Profiler(threading.Thread):
 
     def _profile(self):
         times, rss_mems, vms_mems, cpu_percents, threads = [], [], [], [], []
-        
+
         try:
             while self._active():
                 rss_mem, vms_mem, cpu_percent, num_threads = _measure(self.process)
@@ -114,30 +117,31 @@ class Profiler(threading.Thread):
             self.cancel()
         except psutil.AccessDenied:
             self.cancel()
-        
+
         return ProfileResult(times, rss_mems, vms_mems, cpu_percents, threads)
-    
+
     def run(self):
         try:
             self._result = self._profile()
         except Exception:
             exc_info = sys.exc_info()
             self._exception = exc_info
-            
+
     def cancel(self):
         self._cancelled = True
 
     def exception(self, timeout=None):
         self.join(timeout)
-        if self.isAlive():
-            raise TimeoutError("Call timed out after: "%timeout)
+        if self.is_alive():
+            raise TimeoutError("Call timed out after: " % timeout)
         return self._exception
 
     def result(self, timeout=None):
         self.join(timeout)
-        if self.isAlive():
-            raise TimeoutError("Call timed out after: "%timeout)
+        if self.is_alive():
+            raise TimeoutError("Call timed out after: " % timeout)
         return self._result
+
 
 def profile_pid(pid, sample_rate=None, timeout=None):
     """
@@ -150,17 +154,18 @@ def profile_pid(pid, sample_rate=None, timeout=None):
     :returns ProfileResult: A `ProfileResult` namedtuple with the profiling result
     """
     if not psutil.pid_exists(pid):
-        raise ValueError("Pid '%s' does not exist"%pid)
-    
+        raise ValueError("Pid '%s' does not exist" % pid)
+
     profiler = Profiler(pid, sample_rate)
     profiler.start()
     ex = profiler.exception(timeout)
     if ex is not None:
         traceback.print_exception(*ex)
         raise ex
-    
+
     return profiler.result()
-    
+
+
 def profile_cmd(cmd, sample_rate=None, timeout=None):
     """
     Profile a specific command 
@@ -184,15 +189,16 @@ class profile(object):
     :param fmt: (optional) The desired output format. Can also be a tuple of formats. Supported: txt and any matplotlib fmt
     :param callname: (optional) Name used for plot title and output file name
     """
+
     def __init__(self, sample_rate=None, timeout=None, fmt="txt", callname=None):
 
         self.sample_rate = sample_rate
         self.timeout = timeout
-        
+
         if isinstance(fmt, str):
             fmt = [fmt]
         self.fmt = fmt
-        self.save_fig=True
+        self.save_fig = True
         self.callname = callname
 
     def __call__(self, func):
@@ -221,6 +227,5 @@ class profile(object):
                 return res
             finally:
                 profiler.cancel()
-                
-        return wrapper
 
+        return wrapper
