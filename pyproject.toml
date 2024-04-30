@@ -2,12 +2,12 @@
 name = "propro"
 version = "0.1.0"
 description = "Profiles a process"
-authors = ["Joel Akeret <you@example.com>"]
+authors = ["Joel Akeret"]
 license = "GPLv3"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.9"
 click = "^8.1"
 psutil = "^5.9"
 matplotlib = "^3.8"

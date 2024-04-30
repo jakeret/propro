@@ -34,10 +34,6 @@ SLEEP_TIME = 0.5
 PLOTTING_FMTS = ("pdf", "png")
 
 
-class TimeoutError(Exception):
-    pass
-
-
 def _savetxt(filename, result):
     with open(filename, "w") as fp:
         for i in range(len(result.time)):
